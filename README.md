@@ -6,24 +6,16 @@ Objectifs, atouts :
 - Précision dans les coordonnées (supprimer l’étage humaine digitaliser)
 
 EasyCache :
+<img>
 
+<img/>
+
+<a href=http://blog.chezlenox.fr.nf/data/images/EasyCache_031.png'><img src='http://blog.chezlenox.fr.nf/data/images/EasyCache_031.png' /></a>
  
-
-
-EasyCut :
-
- 
-
-
-Procédure d’export Eclipse :
-
- 
-
-
 Principe simplifié d’utilisation :
 
 <pre>
-1)	Export du Cache RP.dcm via filtre export Eclispe (voir PrintSceen ci-dessus).
+1)	Export du Cache RP.dcm via filtre export Eclispe.
 2)	Ouvrir EasyCache : 
   a.	[ Source ] Fichier_Eclipse.dcm
   b.	[Cible] Dossier_de_destination
