@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<title>Introduction au module Tkinter de python 2.5</title>
+<meta name="author" content="www.jchr.be">
+<meta name="keywords" content="python, prise en main, introduction">
+<meta name="description" content="Introduction à l'interface utilisateur TKinter">
+<link rel="stylesheet" href="Introduction%20au%20module%20Tkinter%20de%20python%202.5_fichiers/jchr.css" type="text/css" media="screen">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="home" title="Sommaire" type="text/html" href="http://www.jchr.be/sommaire.htm">
+</head><body>
+
+<div id="entete">
+
+<div class="ssr">
+<a href="http://www.jchr.be/politique/site-sans-reclame.htm" class="ssr">(site sans réclame)</a>
+</div>
+
+<a href="http://www.jchr.be/python/index.htm">Python</a> &nbsp;&#8211;&nbsp;
+<a href="http://www.jchr.be/python/manuel.htm">Manuel</a> &nbsp;&#8211;&nbsp;
+<a href="http://www.jchr.be/courriel.php">Cont@ct</a> &nbsp;&#8211;&nbsp;
+<a href="http://www.jchr.be/email.php">S'abonner</a>
+</div>
+
+<h1 id="debut">Module graphique Tkinter pour Python</h1>
+
+<div id="texte">
+<p>
+Tkinter est le module graphique de base du langage <a href="http://www.jchr.be/python/manuel.htm">python</a>. Ce n'est pas le seul, par exemple, <em><a href="http://www.wxpython.org/what.php" class="ext">wxPython</a></em>, <em><a href="http://www.riverbankcomputing.co.uk/pyqt/" class="ext">PyQt</a></em> ou <em><a href="http://www.pygtk.org/" class="ext">PyGTK</a></em>. Les exemples ci-dessous sont fonctionnels sur Debian.
+</p>
+
+<div class="menu">
+
+<h5><a href="#t1">1.</a> Utilisation du module Tkinter</h5>
+<p>
+<a href="#t11">1.1</a> Charger le module<br>
+<a href="#t11">1.2</a> Ouvrir une fenêtre<br>
+<a href="#t11">1.3</a> Lancer le script
+</p>
+
+<h5><a href="#t2">2.</a> Les widgets simples</h5>
+<p>
+<a href="#t21">2.1</a> 'Label'<br>
+<a href="#t22">2.2</a> 'Text'<br>
+<a href="#t23">2.3</a> 'Entry'<br>
+<a href="#t24">2.4</a> 'Button'<br>
+<a href="#t25">2.5</a> 'Checkbutton'<br>
+<a href="#t26">2.6</a> 'Radiobutton'
+</p>
+
+<h5><a href="#canvas">3.</a> L'espace graphique Canvas</h5>
+<p>
+<a href="#image">3.1</a> Afficher une image<br>
+<a href="#figures">3.2</a> Rectangle, ellipse et quartier<br>
+<a href="#ligne">3.3</a> Ligne et point<br>
+<a href="#polygone">3.4</a> Polygones<br>
+<a href="#texte">3.5</a> Texte graphique<br>
+<a href="#reconfigurer">3.6</a> Reconfigurer un objet
+</p>
+<h5><a href="#fenetres">4.</a> Fenêtres, cadres et panneaux</h5>
+<p>
+<a href="#toplevel">4.1</a> TopLevel<br>
+<a href="#frame">4.2</a> Frame<br>
+<a href="#paned">4.3</a> PanedWindow
+</p>
+
+</div><div class="menu">
+
+<h5><a href="#menus">5.</a> Listes et menus</h5>
+<p>
+<a href="#listbox">5.1</a> Listbox<br>
+<a href="#scrollbar">5.2</a> Scrollbar<br>
+<a href="#sysmenu">5.3</a> Menu
+</p>
+
+<h5><a href="#styles">7.</a> Styles</h5>
+
+<p>
+<a href="#couleurs">7.1</a> Couleurs<br>
+<a href="#alignements">7.2</a> Alignements<br>
+<a href="#reliefs">7.3</a> Reliefs<br>
+<a href="#fontes">7.4</a> Fontes
+</p>
+
+<h5><a href="#modules">8.</a> Modules associés</h5>
+<p>
+<a href="#messages">8.1</a> Boîtes à message<br>
+<a href="#saisie">8.2</a> Boîtes de saisie<br>
+<a href="#fichiers">8.3</a> Sélecteurs de fichier<br>
+<a href="#nuancier">8.4</a> Sélecteurs de couleur
+</p>
+
+<h5><a href="#documentation">9.</a> Documentation</h5>
+<p>
+<a href="#logiciel">9.1</a> dans le logiciel<br>
+<a href="#gnulinux">9.2</a> sur le système GNU+Linux<br>
+<a href="#internet">9.3</a> sur Internet<br>
+<a href="#papier">9.4</a> sur papier<br>
+</p>
+
+</div>
+
+<h2 id="t1" style="clear:both;"><a href="#menu">1.</a> Utilisation du module 'Tkinter'</h2>
+<p>
+Tout d'abord, le module Tk pour python doit être installé. Pour Debian-Lenny: <em>apt-get install python-tk</em>
+</p>
+
+<h3 id="t11"><a href="#menu">1.1</a> Charger le module</h3>
+<p>
+Pour utiliser le module <em>Tkinter</em>, il faut d'abord choisir un mode de chargement:
+</p><p>
+<em>import Tkinter</em> charge tout le module, dont le nom doit précéder toute fonction: <em>racine=Tkinter.Tk()</em>.
+</p><p>
+<em>import Tkinter as tk</em> permet d'utiliser un alias: <em>racine=tk.Tk()</em>
+</p><p>
+<em>from Tkinter import *</em> permet d'utiliser toutes les fonctions sans préciser le nom du module: <em>racine=Tk()</em>
+</p><p>
+Dans cette page, par souci de clarté, le module <em>Tkinter</em> sera toujours explicite et les variables seront en français et en minuscules.
+</p>
+
+<h3 id="t12"><a href="#menu">1.2</a> Ouvrir une fenêtre</h3>
+<p>
+L'utilisation d'une fenêtre se résume schématiquement à cette procédure (les majuscules sont toujours importantes):
+</p><pre>#! /usr/bin/python
+import Tkinter
+racine=Tkinter.Tk()
+racine.geometry("400x300")
+
+racine.mainloop()
+</pre><p>
+<em>Tk()</em> permet de désigner un premier objet (une fenêtre) duquel les autres dépendront,
+son nom est ici 'racine'. <em>racine.mainloop()</em> lancera le gestionnaire d'événements. Les fonctions
+graphiques doivent se situer entre les deux.
+<em>racine.geometry("400x300")</em> permet de préciser la taille de la fenêtre.
+</p>
+
+<h3 id="t13"><a href="#menu">1.3</a> Lancer le script</h3>
+<p>
+Tous les exemples proposés sont fonctionnels. Pour qu'ils puissent fonctionner sur UNIX, ne pas oublier<em>
+#!&nbsp;/usr/bin/python</em>  sur la première ligne (s'assurer que le logiciel <em>python</em> se situe bien à
+cette adresse), sauvegarder le script et le rendre exécutable, par exemple avec <em>chmod&nbsp;755 votre-fichier.py</em>.
+</p><p>
+Avec un système UNIX bien configuré, un double-clic sur l'icone peut <a href="http://www.jchr.be/python/manuel.htm#lancement">lancer un script</a> "graphique", mais il est préférable, lors du développement, de le lancer dans une console: <em>./nom-du-script.py</em> afin de voir les éventuels messages d'erreur.
+</p>
+
+<h2 id="t2"><a href="#menu">2</a> Les widgets simples</h2>
+<p>
+'widget' signifie 'bidule'. Il s'agit d'éléments simples, comme un titre, un bouton, un texte,
+un champ éditable... ou plus complexes, comme un système de menus.
+</p>
+
+<h3 id="t21"><a href="#menu">2.1</a> 'Label'</h3>
+<p>
+'Label' permet un affichage simple de texte:
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+texte=Tkinter.Label(racine, text="Premier texte\ndans une fenetre", fg="black")
+texte.pack(side=Tkinter.RIGHT)
+racine.mainloop()
+</pre><p>
+<em>side=Tkinter.RIGHT</em> permet de placer la chaîne de caractère à droite de la fenêtre<br>
+<em>Label</em> peut également recevoir une image sous format .gif:
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+dessin=Tkinter.PhotoImage(file="nomdefichier.gif")
+label=Tkinter.Label(image=dessin)
+label.pack()
+racine.mainloop()
+</pre>
+
+<h3 id="t22"><a href="#menu">2.2</a> 'Text'</h3>
+<p>
+'Text' définit une plage permettant l'insertion et la manipulation d'un texte.
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+texte=Tkinter.Text(racine, width=25, height=5)
+texte.insert(Tkinter.END,'Un texte ins\xe9r\xe9')
+texte.pack(side=Tkinter.RIGHT)
+racine.mainloop()
+</pre><p>
+'width' est la largeur de la plage en nombre de caractères, 'height' le nombre de lignes.<br>
+RIGHT concerne la plage de texte: en agrandissant la fenêtre, on verra que la plage se situe
+à droite, même si le texte est aligné à gauche. RIGHT est une variable du module, il faut donc
+la précéder du nom de celui-ci avec le mode d'importation du module qu'on a choisi.
+</p>
+
+<h3 id="t23"><a href="#menu">2.3</a> 'Entry'</h3>
+<p>
+'Entry' permet de saisir un texte. Il faut donc prévoir une variable permettant de recevoir
+le texte saisi.
+</p><pre>
+import Tkinter
+racine=Tkinter.Tk()
+texte=Tkinter.Label(racine, text='Cliquer et saisir:', width=20, height=3, fg="black")
+texte.pack()
+saisir=Tkinter.StringVar() # prevoir la variable pour recevoir le texte saisi
+saisie=Tkinter.Entry(textvariable=saisir, width=30)
+saisie.pack()
+racine.mainloop()
+print saisir.get() # on recupere et affiche le texte saisi
+</pre><p>
+On peut recevoir une variable numérique avec IntVar().
+</p>
+
+<h3 id="t24"><a href="#menu">2.4</a> 'Button'</h3>
+<p>
+'Button' définit un bouton cliquable
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+bouton=Tkinter.Button(racine, text="Quitter", command=racine.quit)
+bouton.pack(side=Tkinter.BOTTOM)
+racine.mainloop()
+</pre><p>
+<em>side</em> peut également prendre les valeurs LEFT, RIGHT, TOP ou CENTER
+</p>
+
+<h3 id="t25"><a href="#menu">2.5</a> 'Checkbutton'</h3>
+<p>
+'Chekbutton' est une "case à cocher". Une méthode est proposée pour récupérer l'information
+sur l'état de la "case à cocher".
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+retour=Tkinter.IntVar() # on cree une variable pour l'etat de la case a cocher
+bouton=Tkinter.Checkbutton(racine, variable=retour, text="Cochez-moi")
+bouton.pack()
+racine.mainloop()
+# la valeur est recuperee lors de la sortie de la fenetre:
+if retour.get() == 0: # la variable 'retour' reste a 0 si la case est restee intacte
+  print "Vide!"
+else:
+  print "Tilt!"
+</pre>
+
+<h3 id="t26"><a href="#menu">2.6</a> 'Radiobutton'</h3>
+<p>
+RadioButton est un ensemble de Checkbutton exclusifs pour une même variable.
+La variable option rendra la valeur proposée par 'value' du bouton sélectionné.
+
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+retour=Tkinter.IntVar() # on cree une variable pour la valeur liee a la case cochee
+bouton1=Tkinter.Radiobutton(racine,text="Oui", variable=retour, value=2)
+bouton2=Tkinter.Radiobutton(racine,text="Non", variable=retour, value=3)
+bouton3=Tkinter.Radiobutton(racine,text="P-\xea", variable=retour, value=7)
+bouton1.grid()
+bouton2.grid()
+bouton3.grid()
+racine.mainloop()
+print retour.get() # retourne 2, 3 ou 7 selon le bouton choisi, ou 0 si pas de choix
+</pre><p>
+Il est possible de définir des valeurs-retours sous forme de chaîne (value="bof")
+et en précisant <em>retour=Tkinter.StringVar()</em>
+</p>
+
+<h2 id="canvas"><a href="#menu">3</a> L'espace graphique <em>Canvas</em></h2>
+<p>
+<em>Canvas</em> crée une surface sur laquelle on peut placer des éléments graphiques:
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+fond=Tkinter.Canvas(racine, width=300, height=200, background='darkgray')
+fond.pack()
+ ... # votre script
+racine.mainloop()
+</pre><p>
+Pour les fonctions qui suivent, 'fill' permet la définition d'une couleur (même pour
+'creat_text'), 'width' l'épaisseur, 'outline' la couleur du bord; les objets seront
+placés par "anchor".
+</p>
+
+<h3 id="image"><a href="#menu">3.1</a> <em>Affichier une image</em></h3>
+<p>
+Manière d'insérer une image .gif:
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+photo=Tkinter.PhotoImage(file="votre-image.gif") # ouverture de l'image
+largeur=photo.width(); hauteur=photo.height() # determination des dimensions
+racine.geometry(str(largeur+2)+'x'+str(hauteur+2))
+racine.title(str(largeur)+'x'+str(hauteur))
+fond=Tkinter.Canvas(racine, bg='black')
+fond.pack()
+img=fond.create_image(largeur/2+1,hauteur/2+1,image=photo)
+racine.mainloop()
+</pre>
+
+<h3 id="figures"><a href="#menu">3.2</a> Rectangle, ellipse et quartier</h3>
+<p>
+Pour <em>fond</em> représentant l'ouverture d'un canevas:
+</p><pre>rect=fond.create_rectangle(140,40,280,90, fill='white', outline='red', width=10)
+ellipse=fond.create_oval(30,120,150,180, fill='green', outline='blue', width=5)
+fond.create_arc(x1,y1,x2,y2,start=depart,extent=extension,style=Tkinter.PIESLICE)
+</pre><p>
+Les deux premiers entiers représentent les coordonnées du point en haut à gauche
+du rectangle, les deux suivants celles du point en bas à droite. Pour 'create_oval'
+et 'create_arc', il s'agit des coordonnées du rectangle circonscrit.
+</p><p>
+Pour 'create_arc', l'angle de départ et l'extension sont donnés en 
+degrés (progression anti-horaire). Tkinter.CHORD limite la surface entre
+ la partie d'arc et sa corde.
+</p>
+
+<h3 id="ligne"><a href="#menu">3.3</a> Lignes et points</h3>
+<p>
+Avec <em>fond</em> représentant l'ouverture d'un canevas:
+</p><pre>ligne=fond.create_line(160,190, 250,110, 270,170, 180,120)
+</pre><p>
+Les arguments commencent par des paires qui sont des coordonnées de points.
+</p><p>
+<em>smooth=True</em> si une ligne brisée doit être courbée (spline)<br>
+<em>splinesteps=12</em> pour un lissage de la courbe si <em>smooth=True</em>
+</p><p>
+<em>capstyle=Tkinter.BUTT</em> , ROUND ou PROJECTING<br>
+<em>arrow=Tkinter.BOTH</em> place une flèche aux bouts de la ligne (Tkinter.FIRST pour le départ, Tkinter.LAST pour la fin)<br>
+<em>arrowshape=(8,10,3)</em> permet de modifier la longueur de la flèche, la longueur des branches et la largeur.
+</p><p>
+Pour afficher le point x,y, il faut afficher une ligne qui va de x,y à x+1,y+1 (le dernier point d'une ligne n'est pas affiché).
+</p>
+
+<h3 id="polygone"><a href="#menu">3.4</a> Polygones</h3>
+<p>
+Pour <em>fond</em> représentant l'ouverture d'un canevas:
+</p><pre>polygone=fond.create_polygon(35,105, 120,85, 95,25, 80,75, 25,60, 65,30, fill="cyan", width=5, outline='black')
+</pre><p>
+Les arguments commencent par des paires qui sont des coordonnées de 
+points. Il n'est pas nécessaire de répéter les coordonnées du premier 
+sommet.
+</p><p>
+<em>smooth=True</em> si le pourtour doit être arrondi<br>
+<em>splinesteps=12</em> pour un lissage de la courbe si smooth=True
+</p>
+
+<h3 id="texte"><a href="#menu">3.5</a> Texte graphique</h3>
+<p>
+Pour positionner un texte au pixel près sur un canevas:
+</p><pre>txt=fond.create_text(15, 25, text="Spam?", font="Arial 16 italic", fill="gray")
+</pre><p>
+Rappel: la couleur du texte est définie ici par 'fill'!
+</p>
+
+<h3 id="reconfigurer"><a href="#menu">3.6</a> Reconfigurer un objet</h3>
+<p>
+L'instance récupérée lors de la création a une importance, car elle permet de manipuler les objets créés:
+</p><pre>fond.itemconfigure(ellipse,fill="green") # l'objet 'ellipse' est (re)colore en vert
+fond.delete(rectangle1) # detruit un objet appele 'rectangle1'
+</pre><p>
+Exemple (changement de couleur lié au clic sur un bouton):
+</p><pre>#! /usr/bin/python
+import Tkinter
+racine=Tkinter.Tk()
+
+fond=Tkinter.Canvas(racine, width=300, height=200, background='darkgray')
+fond.pack()
+rectangle=fond.create_rectangle(50,50,250,150, fill='blue')
+
+def Rougit():
+  fond.itemconfigure(rectangle,fill='red')
+
+bouton=Tkinter.Button(racine,text="Rouge!", command=Rougit) # fonction sans guillemets!
+bouton.pack()
+racine.mainloop()
+</pre>
+
+<h2 id="fenetres"><a href="#menu">4.</a> Fenêtres, cadres et panneaux</h2>
+
+<h3 id="toplevel"><a href="#menu">4.1</a> 'TopLevel'</h3>
+<p>
+<em>TopLevel</em> permet l'ouverture d'une nouvelle fenêtre. Afin de ne pas surcharger l'exemple,
+la nouvelle fenêtre n'affiche rien de plus que la première.
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+racine.title("Principale")
+fenetre=Tkinter.Toplevel()
+fenetre.title("Seconde")
+fenetre.grid()
+racine.mainloop()
+</pre><p>
+Deux fenêtres vont s'ouvrir: la principale, nommée pour l'occasion 'Principale', et la
+seconde, appelée 'Seconde'. On subordonne le plus souvent la création d'une seconde fenêtre
+à un événement de la première, par exemple associée au clic d'un bouton.
+</p>
+
+<h3 id="frame"><a href="#menu">4.2</a> 'Frame' et 'LabelFrame'</h3>
+<p>
+Frame est un cadre, permettant de regrouper géographiquement les widgets dans une fenêtre.
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+Cadre=Tkinter.Frame(racine)
+bouton1=Tkinter.Button(Cadre,text="Bouton 1")
+bouton2=Tkinter.Button(Cadre,text="Bouton 2")
+bouton3=Tkinter.Button(Cadre,text="Bouton 3")
+bouton1.pack(side=Tkinter.LEFT)
+bouton2.pack(side=Tkinter.TOP)
+bouton3.pack()
+Cadre.pack()
+racine.mainloop()
+</pre><p>
+Il est possible de donner un bord et un nom à un cadre avec LabelFrame:<br>
+<em>Cadre=Tkinter.LabelFrame(racine,text="Titre de cadre")</em>
+</p>
+
+<h3 id="paned"><a href="#menu">4.3</a> 'PanedWindow'</h3>
+<p>
+PanedWindow permet de diviser une fenêtre en plusieurs panneaux adaptables.
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+racine.geometry("400x300")
+division=Tkinter.PanedWindow(orient=Tkinter.VERTICAL)
+division.pack(expand="yes",fill="both")
+panneau1=Tkinter.Label(division,text="Panneau Un")
+division.add(panneau1)
+panneau2=Tkinter.Label(division,text="Panneau Deux")
+division.add(panneau2)
+panneau3=Tkinter.Label(division,text="Panneau Trois")
+division.add(panneau3)
+racine.mainloop()
+</pre><p>
+On adapte cette fonction dans l'autre direction avec les paramètres suivants:<em>
+orient=Tkinter.HORIZONTAL</em>.
+</p><p>
+Il est possible de créer des subdivisions dans un des panneaux. Dans l'exemple
+suivant, c'est le panneau 'bas' qui devient l'objet à diviser par PanedWindows:
+c'est donc à lui que les sous-panneaux 'gauche' et 'droite' doivent se référer.
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+racine.geometry("400x300")
+division=Tkinter.PanedWindow(orient=Tkinter.VERTICAL)
+division.pack(expand="yes",fill="both")
+haut=Tkinter.Label(division,text="Panneau du haut")
+division.add(haut)
+milieu=Tkinter.Label(division,text="Panneau du milieu")
+division.add(milieu)
+bas=Tkinter.PanedWindow(orient=Tkinter.HORIZONTAL) # nouvelle division
+bas.pack(expand="yes",fill="both")
+gauche=Tkinter.Label(bas,text="Panneau bas-gauche")
+bas.add(gauche)
+droit=Tkinter.Label(bas,text="Panneau bas-droit")
+bas.add(droit)
+division.add(bas) # on acheve la déclaration du panneau bas
+racine.mainloop()
+</pre>
+
+<h2 id="menus"><a href="#menu">5.</a> Listes et menus</h2>
+
+<h3 id="listbox"><a href="#menu">5.1</a> 'Listbox'</h3>
+<p>
+</p><pre>import Tkinter
+racine=Tkinter.Tk()import Tkinter
+liste=Tkinter.Listbox(racine,width=10)
+liste.pack()
+texte=Tkinter.Text(racine,width=10)
+texte.pack()
+for element in ["Monthy", "Python", "Flying", "Circus"]:
+  liste.insert(Tkinter.END, element)
+def clic(inutile):
+  texte.insert(Tkinter.END,liste.get(liste.curselection())+"\n")
+liste.bind('&lt;Double-1&gt;', clic)
+racine.mainloop()
+</pre><p>
+'inutile' est une variable nécessaire mais qu'on n'utilise pas.<br>
+<em>liste=Tkinter.Listbox(selectmode=Tkinter.EXTENDED)</em> permet un mode de sélection multiple
+avec Ctrl-Clic, Maj-Clic... MULTIPLE permet une sélection multiple par ajout de simple clic.
+</p><p>
+Il est possible de remplacer le double-clic par un bouton.
+</p><pre>#! /usr/bin/python
+import Tkinter
+racine=Tkinter.Tk()
+liste=Tkinter.Listbox(racine,width=10)
+liste.pack()
+bouton=Tkinter.Button(racine,text='Confirmer')
+bouton.pack()
+texte=Tkinter.Text(racine,width=10)
+texte.pack()
+for element in ["Monthy", "Python", "Flying", "Circus"]:
+  liste.insert(Tkinter.END, element)
+def clic(inutile):
+  texte.insert(Tkinter.END,liste.get(liste.curselection())+"\n")
+bouton.bind('&lt;Button-1&gt;', clic)
+racine.mainloop()
+</pre>
+
+<h3 id="scrollbar"><a href="#menu">5.2</a> 'Scrollbar'</h3>
+<p>
+'Scrollbar' permet de placer un ascenseur, afin de manipuler plus facilement une 'Listbox'. L'exemple
+ci-dessous montre qu'il est possible de prévoir un défilement vertical à partir d'un ascenseur horizontal.
+</p><pre>import Tkinter
+racine = Tkinter.Tk()
+ascenseur= Tkinter.Scrollbar(racine,orient=Tkinter.HORIZONTAL)
+ascenseur.pack(side=Tkinter.TOP,fill=Tkinter.X)
+liste= Tkinter.Listbox(racine, yscrollcommand=ascenseur.set)
+for i in range(0,128):
+  liste.insert(Tkinter.END, str(i))
+liste.pack(fill=Tkinter.Y)
+ascenseur.config(command=liste.yview)
+racine.mainloop()
+</pre><p>
+<em>orient=Tkinter.HORIZONTAL</em> pour un ascenseur horizontal (vertical par défaut), même si
+la commande a une action verticale: 'yview'<br>
+<em>fill=Tkinter.X</em> met de l'espace entre les deux flèches de l'ascenseur horizontal<br>
+<em>side=Tkinter.LEFT</em> aurait placé l'ascenseur à gauche
+</p>
+
+<h3 id="sysmenu"><a href="#menu">5.3</a> 'Menu'</h3>
+<p>
+Voici un exemple commenté d'un système de menu fonctionnel comportant des cascades (sous-menus).
+Pour la fonction Menu, deux méthodes sont nécessaires: <em>add_cascade</em> pour ajouter un menu
+ou un sous-menu, et <em>add_command</em> pour décider de la commande associée au clic. Les actions
+sont ici limitées à l'affichage d'un texte.
+</p><pre>import Tkinter
+racine=Tkinter.Tk()
+
+texte=Tkinter.Text(racine) # prevoit une place pour l'affichage des textes
+texte.pack()
+
+def ecran(var): # fonction servant a l'affichage des textes:
+  texte.insert(Tkinter.END,var)
+
+sysdemenu = Tkinter.Menu(racine) # Creation du systeme de menu (variable explicite sysdemenu):
+
+menu1 = Tkinter.Menu(sysdemenu) # Creation du premier menu:
+sysdemenu.add_cascade(label="Menu 1", menu=menu1)
+
+# addition des deux items pour le premier menu et leur commande associee
+menu1.add_command(label="Cr\xe9dit", command=lambda: ecran('Cr\xe9dit: www.jchr.be\n'))
+menu1.add_command(label="Quitter", command=racine.quit)
+
+menu2 = Tkinter.Menu(sysdemenu) # Creation du second menu
+sysdemenu.add_cascade(label="Menu 2", menu=menu2)
+
+# addition du premier item pour le second menu et leur sous-items associes
+item1 = Tkinter.Menu(menu2)
+menu2.add_cascade(label="Item 1", menu=item1)
+
+# addition des sous-items du premier item du second menu et leur commande associee
+item1.add_command(label="Action 1", command=lambda: ecran('Item 1 / Action 1\n'))
+item1.add_command(label="Action 2", command=lambda: ecran('Item 1 / Action 2\n'))
+
+item2 = Tkinter.Menu(menu2) # addition du second item pour le second menu et leur sous-items associes
+menu2.add_cascade(label="Item 2", menu=item2)
+
+# addition des sous-items du second item du second menu et leur commande associee
+item2.add_command(label="Action 1", command=lambda: ecran('Item 2 / Action 1\n'))
+item2.add_command(label="Action 2", command=lambda: ecran('Item 2 / Action 2\n'))
+item2.add_command(label="Action 3", command=lambda: ecran('Item 2 / Action 3\n'))
+racine.config(menu=sysdemenu)
+racine.mainloop()
+</pre><p>
+Chaque menu commence par une ligne discontinue. Un clic transfère le menu dans une fenêtre indépendante.
+On peut empêcher cela en ajoutant le paramètre <em>tearoff=0</em> dans la fonction 'Menu'
+</p>
+
+<h2 id="styles"><a href="#menu">7.</a> Styles</h2>
+
+<h3 id="couleurs"><a href="#menu">7.1</a> Couleurs</h3>
+<p>
+Pour les paramètres foreground, fg, background, bg, fill, outline
+</p><p>
+On utilise la forme <em>"#RRGGBB"</em> où les lettres représentent le rouge, le vert et le
+bleu en chiffres hexadécimaux (de '0' à '9' puis de 'a' à 'f'). Il existe aussi des noms
+parmi lesquels:
+</p><p>
+black, dark-gray, gray, light-gray, white<br>
+cyan, blue, violet, magenta, red, yellow, green<br>
+gold, pink, orange
+</p>
+
+<h3 id="alignements"><a href="#menu">7.2</a> Alignements</h3>
+<p>
+Pour <em>side</em> (boutons) ou <em>justify</em> (textes)<br>
+Tkinter.LEFT, Tkinter.RIGHT, Tkinter.TOP, Tkinter.BOTTOM
+</p><p>
+Pour <em>anchor</em> (images):<br>
+Tkinter.N, Tkinter.S, Tkinter.E, Tkinter.W, Tkinter.NE, Tkinter.SE, Tkinter.NW, Tkinter.SW, Tkinter.CENTER
+</p>
+
+<h3 id="reliefs"><a href="#menu">7.3</a> Reliefs</h3>
+<p>
+<em>relief</em>  peut prendre les valeurs Tkinter.RAISED, FLAT, SUNKEN, GROOVE et RIDGE<br>
+<em>borderwidth</em>, <em>bd</em> permet de préciser la grosseur des traits
+</p>
+
+<h3 id="fontes"><a href="#menu">7.4</a> Fontes</h3>
+<p>
+Valable pour 'Label', 'Text' et 'create_text', il y a plusieurs manières d'imposer une fonte,
+une hauteur et une décoration:
+</p><p>
+<em>font =("Helvetica", "16", "bold italic overstrike underline")<br>
+font=("-*-lucidatypewriter-medium-r-*-*-*-200-*-*-*-*-*-*")</em>
+</p><p>
+Une autre manière est d'utiliser le module <em>tkFont</em>.
+</p>
+
+<h2 id="modules"><a href="#menu">8.</a> Modules associés</h2>
+<p>
+Les quatre librairies qui suivent permettent de définir l'option suivante:<br>
+<em>parent=</em> pour désigner la fenêtre parente lorsque la boîte est refermée
+</p>
+
+<h3 id="messages"><a href="#menu">8.1</a> Boîtes à message</h3>
+<p>
+<em>import tkMessageBox as Msg</em> importe les fonctions de boîte à messages, à préfixer de Msg.
+</p><p>
+Retournent <em>'ok'</em>:<br>
+<em>Msg.showinfo(title="",message="")</em><br>
+<em>Msg.showwarning(title="",message="")</em><br>
+<em>Msg.showerror(title="",message="")</em><br>
+</p><p>
+Retournent <em>'yes'</em> ou <em>'no'</em>:<br>
+<em>Msg.askquestion(title="",message="")</em>
+</p><p>
+Retournent <em>True</em> ou <em>False</em>:<br>
+<em>Msg.askokcancel(title="",message="")</em> <br>
+<em>Msg.askyesno(title="",message="")</em> <br>
+<em>Msg.askretrycancel(title="",message="")</em> 
+</p><p>
+Il est possible de définir les choix par <em>default=<br>
+Msg.ABORT, Msg.RETRY, Msg.IGNORE, Msg.OK, Msg.CANCEL, Msg.YES, Msg.NO</em>
+</p>
+
+<h3 id="saisie"><a href="#menu">8.2</a> Boîtes de saisie</h3>
+<p>
+<em>import tkSimpleDialog as Saisie</em>
+</p><p>
+<em>chaine= Saisie.askstring(title="", prompt="")</em><br>
+<em>entier= Saisie.askinteger(title="", prompt="")</em><br>
+<em>decimal= Saisie.askfloat(title="", prompt="")</em>
+</p><p>
+On peut ajouter quelques options:<br>
+<em>initialvalue=</em> valeur de départ (chaîne, entier ou décimal)<br>
+<em>minvalue=</em> valeur minimale<br>
+<em>maxvalue=</em> valeur maximale<br>
+</p>
+
+<h3 id="fichiers"><a href="#menu">8.3</a> Sélectionneur de fichier</h3>
+<p>
+<em>import tkFileDialog as Selector</em>
+</p><p>
+<em>descr=Selector.askopenfilename()</em><br>
+<em>descr=Selector.asksaveasfilename()</em>
+</p><p>
+(voir <a href="http://www.jchr.be/python/manuel.htm#t53">ici</a> pour la manipulation du <b>descr</b>ipteur de fichier). Options:
+</p><p>
+<em>initialdir=""</em> répertoire<br>
+<em>initialfile=""</em> fichier (ignoré pour 'open')<br>
+<em>defaultextension=""</em> permet de définir une extension<br>
+<em>filetypes="dsc01*"</em> permet d'appliquer un filtre, "*" par défaut.
+</p>
+
+<h3 id="nuancier"><a href="#menu">8.4</a> Choisir une couleur</h3>
+<p>
+<em>((rouge,vert,bleu),couleur)=tkColorChooser.askcolor()</em> fait apparaître un sélectionneur de couleur. Le sous-n-uple
+définit trois variables (de 0 à 255) pour les couleurs fondamentales, <em>couleur</em> contiendra la couleur au format <em>#RRVVBB</em>
+</p><p>
+Il est possible de recueillir la couleur en une seule variable:
+</p><pre>#! /usr/bin/python
+
+import tkColorChooser
+couleur=tkColorChooser.askcolor()
+print couleur[0][0] # est la quantite de rouge
+print couleur[0][1] # est la quantite de vert
+print couleur[0][2] # est la quantite de bleu
+print couleur[1]    # est la couleur sous forme #RRVVBB
+</pre><p>
+<em>askcolor()</em> admet comme paramètres <em>initialcolor=(rouge,vert,bleu)</em> (trois nombres &lt;256)
+pour une couleur préalablement définie et <em>title=""</em> pour définir un titre de boîte.
+</p>
+
+<h2 id="documentation"><a href="#debut">9.</a> Documentation</h2>
+
+<h3 id="logiciel"><a href="#menu">9.1</a> Documentation dans le logiciel python</h3>
+<p>
+Dans le mode interactif (obtenu en saisissant <em>python</em>  dans une console):
+</p><p>
+<em>&nbsp; &gt;&gt;&gt; print dir()</em>  liste les modules chargés<br>
+<em>&nbsp; &gt;&gt;&gt; print Tkinter.__file__</em>  renvoie la localisation de Tkinter sur le système<br>
+<em>&nbsp; &gt;&gt;&gt; print dir(Tkinter)</em> liste les instructions du module Tkinter<br>
+<em>&nbsp; &gt;&gt;&gt; print Tkinter.fct.__doc__</em> documente l'instruction précisée de Tkinter
+</p><p>
+La commande <em>help</em> informe sur une fonction d'un module importé:
+</p><p><em>
+&nbsp; &gt;&gt;&gt; import Tkinter<br>
+&nbsp; &gt;&gt;&gt; help(Tkinter.Button)
+</em></p>
+
+<h3 id="gnulinux"><a href="#menu">9.2</a> Documentation sur votre système GNU+Linux</h3>
+<p>
+Si python est installé, saisir <em>man python</em> dans une console renseigne sur les différentes manières de lancer python.
+</p><p>
+Le script <em>/usr/bin/pydoc</em> permet la consultation d'information de fonctions, modules, mots-clés:<br>
+<em>pydoc -g</em> lance une interface graphique pour une navigation dans le système d'aide
+</p><p>
+<em>/usr/share/doc/python</em> (adresse pouvant varier selon la distribution) contient quelques fichiers d'aide
+</p>
+
+<h3 id="internet"><a href="#menu">9.3</a> Documentation sur Internet (anglais)</h3>
+<ul><li>
+<a href="http://docs.python.org/library/tkinter.html" class="ext">http://docs.python.org/lib/module-Tkinter.html</a>
+</li><li>
+<a href="http://www.pythonware.com/library/" class="ext">http://www.pythonware.com/library/</a>
+</li><li>
+<a href="http://effbot.org/tkinterbook/" class="ext">http://effbot.org/tkinterbook/</a>
+</li></ul>
+
+<h3 id="papier"><a href="#menu">9.4</a> Documentation sur papier</h3>
+<ul><li>
+<b>John E. Grayson</b>, <a href="http://www.manning.com/grayson/" class="ext">Python and Tkinter Programming</a>, Manning Publications
+</li><li>
+<b>Alex Martelli &amp; David Ascher, eds.: "python cookbook", o'reilly, 2002</b> (anglais) comporte peu de choses sur le module Tkinter.
+</li></ul>
+
+</div>
+
+
+</body></html>
