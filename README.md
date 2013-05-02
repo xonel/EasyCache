@@ -22,6 +22,7 @@ Procédure d’export Eclipse :
 
 Principe simplifié d’utilisation :
 
+<pre>
 1)	Export du Cache RP.dcm via filtre export Eclispe (voir PrintSceen ci-dessus).
 2)	Ouvrir EasyCache : 
   a.	[ Source ] Fichier_Eclipse.dcm
@@ -32,7 +33,7 @@ Principe simplifié d’utilisation :
 5)	Dans EasyCut, Ajouter au registre le FICHIER_EasyCache.ecf
 6)	Appliquer la procédure normale de création de cache.
 7)	Toujours penser à comparer le PrintScreen Eclipse et le cache finalisé par EasyCut.
-
+</pre>
 
 FAIT :
 - Kernel de conversion .dcm>.ecf
