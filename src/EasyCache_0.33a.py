@@ -77,6 +77,9 @@ if sys.version_info[0] < 3:
 else:
     import tkinter as Tk
 
+#Variables Globales
+global VfacAgr
+
 # ==> Click GUI
 def buttonClickSource():
         global Vsource
@@ -136,22 +139,21 @@ def f_exploSource():
 	Vsource = os.path.normpath(tkFileDialog.askopenfilename(filetypes = [("RP_dicom (Eclispe)","*.dcm"),("All", "*")]))
 
 def f_exploCible(Vinitialdir):
-	global Vcible
-	if Vinitialdir == '':
-		Vcible = tkFileDialog.askdirectory()
-	else:
-		Vcible = Vinitialdir
+    global Vcible
+    if Vinitialdir == '':
+        Vcible = tkFileDialog.askdirectory()
+    else:
+        Vcible = Vinitialdir
 
 def f_checkProcess():
-	global Vinitialdir
-	
-	if Vsource == '':
-		f_exploSource()
+    global Vinitialdir
+    if Vsource == '':
+        f_exploSource()
 
-	if Vcible == '':
-		Vinitialdir = os.path.normpath(r'//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/')
-		print Vinitialdir			
-		f_exploCible(Vinitialdir)
+    if Vcible == '':
+        Vinitialdir = os.path.normpath(r'//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/')
+        print Vinitialdir
+        f_exploCible(Vinitialdir)
 
 def f_checkDcm():
         #Controle si le dcm est bien un RT Plan comprenant un cache
@@ -161,7 +163,7 @@ def f_checkDcm():
                 f_openDcm()
 
 def f_openDcm():
-        global ds, diverg, namepat, dateplan, datepat, headercom,  nbrBlocks, machine, nbrOfbeam, nomsdubeam, planlabel , idpat
+        global ds, diverg, namepat, dateplan, datepat, headercom,  nbrBlocks, machine, nbrOfbeam, nomsdubeam, planlabel , idpat, VfacAgr
 
         #Source fichier dcm
         ds = dicom.read_file(Vsource)
@@ -185,15 +187,6 @@ def f_openDcm():
         dump_file = open(Vsource+"_dump.txt", 'w')
         dump_file.write(str(ds))
         dump_file.close()
-
-        # retour des variables dans GUI
-        labeltxt1Var.set(
-        "Patient Name : " +str(namepat)+ '\n'
-        "Patient ID : " +str(idpat)+ '\n'       
-        "Date Naissance : " +str(datepat)+ '\n' + '\n' +
-        "Faisceau : " +str(nomsdubeam)+ '\n'
-        "Plan : " +str(planlabel)+ '\n'        
-        "Machine : " +str(machine)+ '\n')
 
 def f_headerEcf():
         #Mise en forme du fichier .ecf
@@ -222,8 +215,10 @@ def f_coord(nivo) :
         diverg = ds[0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0xf5].value #(300a, 00f8) Block Type CS: 'APERTURE'
         if diverg == 'Plaque electron': #Au CHU si plaque e- divergence OFF
                 diverg = "N"
+                VfacAgr = (905.0/950.0) #Facteur historique (recherche ampirique) e- = 905 
         if diverg == 'Plaque photon':
                 diverg = "Y"
+                VfacAgr = 1
 		# Beurk a modifier si possible Parser fichier gabarit xml
         outBeam = """[Beam"""+ str(nivo) +"""]
 Description="""+ str(headercom)+"_"+ str(machine) +"_"+ str(idpat) +"_"+ str(namepat) +"_"+ str(planlabel) +"_"+ str(nomsdubeam)+"""
@@ -263,9 +258,9 @@ Divergent="""+ str(diverg) +"""
                 Xlist.append(X)
                 Ylist.append(Y)
 
-                #Facteur agrandissement fixe a 9
-                Xeasycut = int(X*9)
-                Yeasycut = int(Y*9)
+                #Facteur agrandissement 10 x Facteur(e-) ou Facteur(photon) 
+                Xeasycut = int(X*VfacAgr*10)
+                Yeasycut = int(Y*VfacAgr*10)
 
                 #Ecriture du .ecf coordonnees
                 outX = "X"+ str(cpt)+ "=" + str(Xeasycut)+'\n'
@@ -277,11 +272,23 @@ Divergent="""+ str(diverg) +"""
                 cpt = cpt + 1 #Compteur de point dans .ecf
                 i=i+2
 
+        # retour des variables dans GUI
+        labeltxt1Var.set(
+        "Patient Name : " +str(namepat)+ '\n'
+        "Patient ID : " +str(idpat)+ '\n'       
+        "Date Naissance : " +str(datepat)+ '\n' + '\n' +
+        "Faisceau : " +str(nomsdubeam)+ '\n'
+        "Plan : " +str(planlabel)+ '\n'        
+        "Machine : " +str(machine)+ '\n' + '\n' +
+        "Facteur :" +str(VfacAgr)+ '\n' + '\n')
+
+
 def f_graphCache():
         #Dessine le cache item = ds [0x300a,0xb0][nivo][0x300a,0xf4][0][0x300a,0x106].value
         a.plot(Xlist,Ylist, 'b', label=''+namepat+' - ('+nomsdubeam+')')
         a.legend()
         canvas.show()
+
 
 
 def f_creerEcf():
@@ -293,18 +300,17 @@ def f_creerEcf():
         ecf_file = open(ecf_path , 'w')
 
 def f_creerMatplotGraphe():
-	global f, a, canvas
-	f = Figure()
-	a = f.add_subplot(111)
-	a.axis([-100,100,-100,100])
-	a.axvline(color='k')  # axe des y
-	a.axhline(color='k')  # axe des x
-	a.grid()            # reprend les labels des plots
-
-	# Figure matplotlib dans GUI
-	canvas = FigureCanvasTkAgg(f, master=root)
-	canvas._tkcanvas.grid(column=1, row=1,rowspan =4)
-	canvas.show()
+    global f, a, canvas
+    f = Figure()
+    a = f.add_subplot(111)
+    a.axis([-100,100,-100,100])
+    a.axvline(color='k')  # axe des y
+    a.axhline(color='k')  # axe des x
+    a.grid()            # reprend les labels des plots
+    # Figure matplotlib dans GUI
+    canvas = FigureCanvasTkAgg(f, master=root)
+    canvas._tkcanvas.grid(column=1, row=1,rowspan =4)
+    canvas.show()
 
 # ====> GUI
 root = Tk.Tk()
