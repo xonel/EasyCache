@@ -98,27 +98,20 @@ def buttonClickProcess():
     labelScrVar.set(Vsource)
     labelCblVar.set(Vcible)
     print'1 f_checkProcess() DONE'
-
     f_openDcm()
     print'2 f_openDcm() DONE'
-
     f_creerEcf()
     print'3 f_creerEcf() DONE'
-
     f_headerEcf()
     print'4 f_headerEcf() DONE'
-
     f_coord(0)
     print'5 f_coord(0) DONE'
-
     ecf_file.close()
-
     f_graphCache()
     print'6 f_graphCache() DONE'
-
-    print '\n >>>> Vsource = \n', Vsource
-    print '\n >>>> Vcible = \n', Vcible
-    print '\n >>>> Fichier .ECF =\n' ,ecf_path
+    print '\n [Vsource] = \n', Vsource
+    print '\n [Vcible] = \n', Vcible
+    print '\n [.ECF] =\n' ,ecf_path
     print '\n -- PROCEDURE TERMINE --'
 
 def buttonClickClear():
@@ -137,25 +130,30 @@ def buttonClickClear():
 # <== Click GUI
 
 def f_exploSource():
-    global Vsource, filetypes
-    Vsource = os.path.normpath(tkFileDialog.askopenfilename(filetypes = [("RP_dicom (Eclispe)","*.dcm"),("All", "*")]))
+    global Vsource, filetypes, VinitSource
+    VinitSource = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/Export_ECLIPSE/"
+    Vsource = os.path.normpath(tkFileDialog.askopenfilename(initialdir = VinitSource, filetypes = [("RP_dicom (Eclispe)","*.dcm"),("All", "*")]))
 
-def f_exploCible(Vinitialdir):
+def f_exploCible(VinitCible):
     global Vcible
-    if Vinitialdir == '':
-        Vcible = tkFileDialog.askdirectory()
+    VinitCible = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/"
+
+    if VinitCible == '':
+        Vcible = tkFileDialog.askdirectory(initialdir = VinitCible)
     else:
-        Vcible = Vinitialdir
+        Vcible = os.path.normpath(VinitCible)
 
 def f_checkProcess():
-    global Vinitialdir
+    global VinitCible, VinitSource
     if Vsource == '':
+        VinitSource = os.path.normpath(VinitSource)
+        print VinitSource
         f_exploSource()
 
     if Vcible == '':
-        Vinitialdir = os.path.normpath(r'//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/')
-        print Vinitialdir
-        f_exploCible(Vinitialdir)
+        VinitCible = os.path.normpath(VinitCible)
+        print VinitCible
+        f_exploCible(VinitCible)
 
 def f_checkDcm():
     #Controle si le dcm est bien un RT Plan comprenant un cache
@@ -282,7 +280,8 @@ Divergent="""+ str(diverg) +"""
     "Faisceau : " +str(nomsdubeam)+ '\n'
     "Plan : " +str(planlabel)+ '\n'        
     "Machine : " +str(machine)+ '\n' + '\n' +
-    "Facteur :" +str(VfacAgr)+ '\n' + '\n')
+    "Facteur :" +str(VfacAgr)+ '\n' + '\n'
+    )
 
 
 def f_graphCache():
@@ -327,7 +326,8 @@ labeltxt1 = Tk.Label(root, textvariable=labeltxt1Var, anchor="w", fg="blue")
 labeltxt1.grid(column=0, row=1, sticky="W")
 
 #Source
-Vsource = ''
+Vsource = ""
+VinitSource = ""
 buttonSource = Tk.Button(master=root, text = "Source >", command= buttonClickSource, bg='red' )
 buttonSource.grid(column=0, row=5, sticky='EW')
 
@@ -338,7 +338,7 @@ labelScr.grid(column=1, row=5, sticky="EW")
 
 #Cible
 Vcible = ""
-Vinitialdir = ""
+VinitCible = ""
 buttonCible = Tk.Button(master=root,text = "   Cible >",command= buttonClickCible, bg='#01A2FF')
 buttonCible.grid(column=0, row=6, sticky='EW')
 
