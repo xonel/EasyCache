@@ -73,18 +73,18 @@ from matplotlib.figure import Figure
 
 import sys
 if sys.version_info[0] < 3:
-    import Tkinter as Tk
+	import Tkinter as Tk
 else:
-    import tkinter as Tk
+	import tkinter as Tk
 
 #Variables Globales
-global VfacAgr
+global VfacAgr, cpt, Xeasycut, Yeasycut
 
 # ==> Click GUI
 def buttonClickSource():
-    global Vsource
-    f_exploSource()
-    labelScrVar.set(Vsource)
+	global Vsource
+	f_exploSource()
+	labelScrVar.set(Vsource)
 
 def buttonClickCible():
 	global Vcible
@@ -92,135 +92,135 @@ def buttonClickCible():
 	labelCblVar.set(Vcible)
 
 def buttonClickProcess():
-    f.clf() # matplotlib.pyplot.clf() => Clear the current figure.
-    f_creerMatplotGraphe()
-    f_checkProcess()
-    labelScrVar.set(Vsource)
-    labelCblVar.set(Vcible)
-    print'1 f_checkProcess() DONE'
-    f_openDcm()
-    print'2 f_openDcm() DONE'
-    f_creerEcf()
-    print'3 f_creerEcf() DONE'
-    f_headerEcf()
-    print'4 f_headerEcf() DONE'
-    f_coord(0)
-    print'5 f_coord(0) DONE'
-    ecf_file.close()
-    f_graphCache()
-    print'6 f_graphCache() DONE'
-    print '\n [Vsource] = \n', Vsource
-    print '\n [Vcible] = \n', Vcible
-    print '\n [.ECF] =\n' ,ecf_path
-    print '\n -- PROCEDURE TERMINE --'
+	f.clf() # matplotlib.pyplot.clf() => Clear the current figure.
+	f_creerMatplotGraphe()
+	f_checkProcess()
+	labelScrVar.set(Vsource)
+	labelCblVar.set(Vcible)
+	print'1 f_checkProcess() DONE'
+	f_openDcm()
+	print'2 f_openDcm() DONE'
+	f_creerEcf()
+	print'3 f_creerEcf() DONE'
+	f_headerEcf()
+	print'4 f_headerEcf() DONE'
+	f_coord(0)
+	print'5 f_coord(0) DONE'
+	ecf_file.close()
+	f_graphCache()
+	print'6 f_graphCache() DONE'
+	print '\n [Vsource] = \n', Vsource
+	print '\n [Vcible] = \n', Vcible
+	print '\n [.ECF] =\n' ,ecf_path
+	print '\n -- PROCEDURE TERMINE --'
 
 def buttonClickClear():
-    global Vcible, Vsource
+	global Vcible, Vsource
 
-    Vcible=''
-    Vsource=''
+	Vcible=''
+	Vsource=''
 
-    labelCblVar.set('')
-    labelScrVar.set('')
-    labeltxt1Var.set('')
+	labelCblVar.set('')
+	labelScrVar.set('')
+	labeltxt1Var.set('')
 
-    f.clf() # matplotlib.pyplot.clf() => Clear the current figure.
-    f_creerMatplotGraphe()
+	f.clf() # matplotlib.pyplot.clf() => Clear the current figure.
+	f_creerMatplotGraphe()
 
 # <== Click GUI
 
 def f_exploSource():
-    global Vsource, filetypes, VinitSource
-    VinitSource = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/Export_ECLIPSE/"
-    Vsource = os.path.normpath(tkFileDialog.askopenfilename(initialdir = VinitSource, filetypes = [("RP_dicom (Eclispe)","*.dcm"),("All", "*")]))
+	global Vsource, filetypes, VinitSource
+	VinitSource = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/Export_ECLIPSE/"
+	Vsource = os.path.normpath(tkFileDialog.askopenfilename(initialdir = VinitSource, filetypes = [("RP_dicom (Eclispe)","*.dcm"),("All", "*")]))
 
 def f_exploCible(VinitCible):
-    global Vcible
-    VinitCible = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/"
+	global Vcible
+	VinitCible = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/"
 
-    if VinitCible == '':
-        Vcible = tkFileDialog.askdirectory(initialdir = VinitCible)
-    else:
-        Vcible = os.path.normpath(VinitCible)
+	if VinitCible == '':
+		Vcible = tkFileDialog.askdirectory(initialdir = VinitCible)
+	else:
+		Vcible = os.path.normpath(VinitCible)
 
 def f_checkProcess():
-    global VinitCible, VinitSource
-    if Vsource == '':
-        VinitSource = os.path.normpath(VinitSource)
-        print VinitSource
-        f_exploSource()
+	global VinitCible, VinitSource
+	if Vsource == '':
+		VinitSource = os.path.normpath(VinitSource)
+		print VinitSource
+		f_exploSource()
 
-    if Vcible == '':
-        VinitCible = os.path.normpath(VinitCible)
-        print VinitCible
-        f_exploCible(VinitCible)
+	if Vcible == '':
+		VinitCible = os.path.normpath(VinitCible)
+		print VinitCible
+		f_exploCible(VinitCible)
 
 def f_checkDcm():
-    #Controle si le dcm est bien un RT Plan comprenant un cache
-    if not nbrBlocks > 0:
-        Msg.showwarning(title="",message="Le fichier Dicom ne possede pas de Block(Cache)")
-        f_exploSource()
-        f_openDcm()
+	#Controle si le dcm est bien un RT Plan comprenant un cache
+	if not nbrBlocks > 0:
+		Msg.showwarning(title="",message="Le fichier Dicom ne possede pas de Block(Cache)")
+		f_exploSource()
+		f_openDcm()
 
 def f_openDcm():
-    global ds, diverg, namepat, dateplan, datepat, headercom,  nbrBlocks, machine, nbrOfbeam, nomsdubeam, planlabel , idpat, VfacAgr
+	global ds, diverg, namepat, dateplan, datepat, headercom,  nbrBlocks, machine, nbrOfbeam, nomsdubeam, planlabel , idpat, VfacAgr
 
-    #Source fichier dcm
-    ds = dicom.read_file(Vsource)
+	#Source fichier dcm
+	ds = dicom.read_file(Vsource)
 
-    #Controle presence de cache
-    nbrBlocks = ds[0x300a,0xb0][0][0x300a,0xf0].value
-    f_checkDcm()
+	#Controle presence de cache
+	nbrBlocks = ds[0x300a,0xb0][0][0x300a,0xf0].value
+	f_checkDcm()
 
-    #Header pour le fichier .ecf EasyCut
-    namepat = ds[0x10,0x10].value
-    dateplan = ds[0x300a,0x06].value
-    datepat = ds[0x10,0x30].value
-    headercom = ds[0x300a,0xb0][0][0x300a,0xc2].value
-    nbrOfbeam = ds[0x300a,0x70][0][0x300a,0x80].value
-    machine = ds[0x300a,0xb0][0][0x300a,0xb2].value
-    nomsdubeam = ds[0x300a,0xb0][0][0x300a,0xc2].value #(300a, 00c2) Beam Name LO: 'CCP G'
-    planlabel = ds[0x300a,0xb0][0][0x300a,0xc2].value#(300a, 0002) RT Plan Label                       SH: 'CCP G'
-    idpat = ds[0x10,0x20].value        # (0010, 0020) Patient ID                          LO: '00620138'
+	#Header pour le fichier .ecf EasyCut
+	namepat = ds[0x10,0x10].value
+	dateplan = ds[0x300a,0x06].value
+	datepat = ds[0x10,0x30].value
+	headercom = ds[0x300a,0xb0][0][0x300a,0xc2].value
+	nbrOfbeam = ds[0x300a,0x70][0][0x300a,0x80].value
+	machine = ds[0x300a,0xb0][0][0x300a,0xb2].value
+	nomsdubeam = ds[0x300a,0xb0][0][0x300a,0xc2].value #(300a, 00c2) Beam Name LO: 'CCP G'
+	planlabel = ds[0x300a,0xb0][0][0x300a,0xc2].value#(300a, 0002) RT Plan Label                       SH: 'CCP G'
+	idpat = ds[0x10,0x20].value        # (0010, 0020) Patient ID                          LO: '00620138'
 
-    #Ici dump dans fichier texte du dcm pour visualisation
-    dump_file = open(Vsource+"_dump.txt", 'w')
-    dump_file.write(str(ds))
-    dump_file.close()
+	#Ici dump dans fichier texte du dcm pour visualisation
+	dump_file = open(Vsource+"_dump.txt", 'w')
+	dump_file.write(str(ds))
+	dump_file.close()
 
 def f_headerEcf():
-    #Mise en forme du fichier .ecf
-    global ecf_out
+	#Mise en forme du fichier .ecf
+	global ecf_out
 
-    ecf_header = "[Header]\n"
-    ecf_dateplan = "Date=" + str(dateplan)+ '\n'
-    ecf_namepat = "PatientName=" + str(namepat)+ tictac + '\n'
-    ecf_datepat = "PatientDate=" + str(datepat)+ '\n'
-    ecf_beam = """Comment="""+ str(headercom)+"_"+ str(machine) +"_"+ str(idpat) +"_"+ str(namepat) +"_"+ str(planlabel) +"_"+ str(nomsdubeam)+"""
+	ecf_header = "[Header]\n"
+	ecf_dateplan = "Date=" + str(dateplan)+ '\n'
+	ecf_namepat = "PatientName=" + str(namepat)+ tictac + '\n'
+	ecf_datepat = "PatientDate=" + str(datepat)+ '\n'
+	ecf_beam = """Comment="""+ str(headercom)+"_"+ str(machine) +"_"+ str(idpat) +"_"+ str(namepat) +"_"+ str(planlabel) +"_"+ str(nomsdubeam)+"""
 ID=0
 NoOfBeams="""+ str(nbrOfbeam) +"""
 ProgVersion=0
 
 """ #le triple """ permet le multiligne sans \n
 
-    ecf_out = ecf_header + ecf_dateplan + ecf_namepat + ecf_datepat + ecf_beam
-    ecf_file.write(ecf_out)
+	ecf_out = ecf_header + ecf_dateplan + ecf_namepat + ecf_datepat + ecf_beam
+	ecf_file.write(ecf_out)
 
 def f_coord(nivo) :
-    global item, Xlist, Ylist
+	global item, Xlist, Ylist, cpt, Xeasycut, Yeasycut, X, Y, VfacAgr
 
-    # Recuperation des coordonnees via Dicom du cache0(UNIQUEMENT):
-    ssd = ds[0x300a,0xb0][0][0x300a,0xb4].value
-    std = ds[0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0xf6].value # Source to Block Tray Distance
-    diverg = ds[0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0xf5].value #(300a, 00f8) Block Type CS: 'APERTURE'
-    if diverg == 'Plaque electron': #Au CHU si plaque e- divergence OFF
-            diverg = "N"
-            VfacAgr = (905.0/950.0) #Facteur historique (recherche ampirique) e- = 905 
-    if diverg == 'Plaque photon':
-            diverg = "Y"
-            VfacAgr = 1
+	# Recuperation des coordonnees via Dicom du cache0(UNIQUEMENT):
+	ssd = ds[0x300a,0xb0][0][0x300a,0xb4].value
+	std = ds[0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0xf6].value # Source to Block Tray Distance
+	diverg = ds[0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0xf5].value #(300a, 00f8) Block Type CS: 'APERTURE'
+	if diverg == 'Plaque electron': #Au CHU si plaque e- divergence OFF
+			diverg = "N"
+			VfacAgr = (905.0/950.0) #Facteur historique (recherche empirique) e- = 905 
+	if diverg == 'Plaque photon':
+			diverg = "Y"
+			VfacAgr = 1
 		# Beurk a modifier si possible Parser fichier gabarit xml
-    outBeam = """[Beam"""+ str(nivo) +"""]
+	outBeam = """[Beam"""+ str(nivo) +"""]
 Description="""+ str(headercom)+"_"+ str(machine) +"_"+ str(idpat) +"_"+ str(namepat) +"_"+ str(planlabel) +"_"+ str(nomsdubeam)+"""
 SSD="""+ str(ssd) +"""
 STD="""+ str(std) +"""
@@ -235,96 +235,132 @@ Description= """+ str(namepat)+"-"+ str(nomsdubeam) +"""
 DataSource=EasyCache
 Divergent="""+ str(diverg) +"""
 """
-    ecf_file.write(outBeam)
+	ecf_file.write(outBeam)
 
-    # A data stream of (x,y) pairs which comprise the block edge.
-    # The number of pairs shall be equal to Block Number of Points (300A,0104), and the vertices shall be interpreted as a closed polygon.
-    # Coordinates are projected onto the machine socentric plane i
-    item = ds [0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0x106].value
-    litem = len(item)
+	# A data stream of (x,y) pairs which comprise the block edge.
+	# The number of pairs shall be equal to Block Number of Points (300A,0104), and the vertices shall be interpreted as a closed polygon.
+	# Coordinates are projected onto the machine socentric plane i
+	item = ds [0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0x106].value
+	litem = len(item)
 
-    i=0 # compteur de boucle while
-    cpt=0 #compteur pour point .ecf
-    coordonnees = []
-    Xlist= []
-    Ylist= []
+	i=0 # compteur de boucle while
+	cpt=0 #compteur pour point .ecf
+	VfacAgr = VfacAgr*10 # convert Eclipse (mm) Esaycut (cm)
+	coordonnees = []
+	Xlist= []
+	Ylist= []
 
-    while i<litem:
+	while i<litem:
+		coordonnees = item [i:i+2] # [0_ixOK 1_iyOK  [2 Exit non compris
+		X = coordonnees [0]
+		Y = coordonnees [1]
+		Xlist.append(X)
+		Ylist.append(Y)
 
-            coordonnees = item [i:i+2] # [0_ixOK 1_iyOK  [2 Exit non compris
-            X = coordonnees [0]
-            Y = coordonnees [1]
+		#Facteur agrandissement 10 (mm en cm) x Facteur(e-) ou Facteur(photon)
+		Xeasycut = int(X*VfacAgr)
+		Yeasycut = int(Y*VfacAgr)
 
-            Xlist.append(X)
-            Ylist.append(Y)
+		#Ecriture du .ecf coordonnees
+		f_WriteEcf()
 
-            #Facteur agrandissement 10 (mm en cm) x Facteur(e-) ou Facteur(photon) 
-            Xeasycut = int(X*VfacAgr*10)
-            Yeasycut = int(Y*VfacAgr*10)
+		# Tracer Reticule "dans" cache pour Plaque electron
+		if diverg == "N": #Si eletron (pas divergeant "N") => f_ReticuleE()
+			f_ReticuleE()
+		else:
+			f_ReticuleX()
+		cpt = cpt + 1 #Compteur de point dans .ecf
+		i=i+2
 
-            # Tracer Reticule "dans" cache pour Plaque electron
-			if Xeasycut == 0 :
-				if Yeasycut < 0 :
-					Yeasycut = int((Y+2)*VfacAgr*10)
-				else
-					Yeasycut = int((Y-2)*VfacAgr*10)
-			
-			if Yeasycut == 0 :
-				if Xeasycut < 0 :
-					Xeasycut = int((X+2)*VfacAgr*10)
-				else
-					Xeasycut = int((X-2)*VfacAgr*10)		
-			
-            #Ecriture du .ecf coordonnees
-            outX = "X"+ str(cpt)+ "=" + str(Xeasycut)+'\n'
-            outY = "Y"+ str(cpt)+ "=" + str(Yeasycut)+'\n'
+	# retour des variables dans GUI
+	labeltxt1Var.set(
+	"Patient Name : " +str(namepat)+ '\n'
+	"Patient ID : " +str(idpat)+ '\n'       
+	"Date Naissance : " +str(datepat)+ '\n' + '\n' +
+	"Faisceau : " +str(nomsdubeam)+ '\n'
+	"Plan : " +str(planlabel)+ '\n'        
+	"Machine : " +str(machine)+ '\n' + '\n' +
+	"Facteur :" +str(VfacAgr)+ '\n' + '\n'
+	)
 
-            ecf_file.write(outX)
-            ecf_file.write(outY)
+def f_ReticuleE():
+	global cpt, Xeasycut, Yeasycut, X, Y, VfacAgr
+	if Xeasycut == 0 :
+		print 'f_ReticuleE Xeasycut == 0'
+		cpt = cpt + 1 #Compteur de point dans .ecf
+		if Yeasycut < 0 :
+			Yeasycut = int((Y+2)*VfacAgr)
+			f_WriteEcf()
+		else:
+			Yeasycut = int((Y-2)*VfacAgr)
+			f_WriteEcf()
 
-            cpt = cpt + 1 #Compteur de point dans .ecf
-            i=i+2
+	if Yeasycut == 0 :
+		print 'f_ReticuleE Yeasycut == 0'
+		cpt = cpt + 1 #Compteur de point dans .ecf
+		if Xeasycut < 0 :
+			Xeasycut = int((X+2)*VfacAgr)
+			f_WriteEcf()
+		else:
+			Xeasycut = int((X-2)*VfacAgr)
+			f_WriteEcf()
 
-    # retour des variables dans GUI
-    labeltxt1Var.set(
-    "Patient Name : " +str(namepat)+ '\n'
-    "Patient ID : " +str(idpat)+ '\n'       
-    "Date Naissance : " +str(datepat)+ '\n' + '\n' +
-    "Faisceau : " +str(nomsdubeam)+ '\n'
-    "Plan : " +str(planlabel)+ '\n'        
-    "Machine : " +str(machine)+ '\n' + '\n' +
-    "Facteur :" +str(VfacAgr)+ '\n' + '\n'
-    )
+def f_ReticuleX():
+	global cpt, Xeasycut, Yeasycut, X, Y, VfacAgr
+	if Xeasycut == 0 :
+		print 'f_ReticuleX Xeasycut == 0'
+		cpt = cpt + 1 #Compteur de point dans .ecf
+		if Yeasycut < 0 :
+			Yeasycut = int((Y-2)*VfacAgr)
+			f_WriteEcf()
+		else:
+			Yeasycut = int((Y+2)*VfacAgr)
+			f_WriteEcf()
 
+	if Yeasycut == 0 :
+		print 'f_ReticuleX Yeasycut == 0'
+		cpt = cpt + 1 #Compteur de point dans .ecf
+		if Xeasycut < 0 :
+			Xeasycut = int((X-2)*VfacAgr)
+			f_WriteEcf()
+		else:
+			Xeasycut = int((X+2)*VfacAgr)
+			f_WriteEcf()
+
+def f_WriteEcf():
+	global cpt, Xeasycut, Yeasycut 
+	#Ecriture du .ecf coordonnees
+	outX = "X"+ str(cpt)+ "=" + str(Xeasycut)+'\n'
+	outY = "Y"+ str(cpt)+ "=" + str(Yeasycut)+'\n'
+	ecf_file.write(outX)
+	ecf_file.write(outY)
 
 def f_graphCache():
-        #Dessine le cache item = ds [0x300a,0xb0][nivo][0x300a,0xf4][0][0x300a,0x106].value
-        a.plot(Xlist,Ylist, 'b', label=''+namepat+' - ('+nomsdubeam+')')
-        a.legend()
-        canvas.show()
-
-
+	#Dessine le cache item = ds [0x300a,0xb0][nivo][0x300a,0xf4][0][0x300a,0x106].value
+	a.plot(Xlist,Ylist, 'b', label=''+namepat+' - ('+nomsdubeam+')')
+	a.legend()
+	canvas.show()
 
 def f_creerEcf():
-        global ecf_path, tictac, ecf_out, ecf_file
-        #Creation du fichier .ecf
-        tictac = time.strftime('_%d%m%y%H%M',time.localtime())
-        ecf_folder = str(Vcible) + '/' #Remarque les \\ au lieu de \ ( r'\'' == "\\'")
-        ecf_path = str(ecf_folder) + str(namepat) +"_"+ str(planlabel) +"_"+ str(nomsdubeam) + ".ecf"
-        ecf_file = open(ecf_path , 'w')
+	global ecf_path, tictac, ecf_out, ecf_file
+	#Creation du fichier .ecf
+	tictac = time.strftime('_%d%m%y%H%M',time.localtime())
+	ecf_folder = str(Vcible) + '/' #Remarque les \\ au lieu de \ ( r'\'' == "\\'")
+	ecf_path = str(ecf_folder) + str(namepat) +"_"+ str(planlabel) +"_"+ str(nomsdubeam) + ".ecf"
+	ecf_file = open(ecf_path , 'w')
 
 def f_creerMatplotGraphe():
-    global f, a, canvas
-    f = Figure()
-    a = f.add_subplot(111)
-    a.axis([-100,100,-100,100])
-    a.axvline(color='k')  # axe des y
-    a.axhline(color='k')  # axe des x
-    a.grid()            # reprend les labels des plots
-    # Figure matplotlib dans GUI
-    canvas = FigureCanvasTkAgg(f, master=root)
-    canvas._tkcanvas.grid(column=1, row=1,rowspan =4)
-    canvas.show()
+	global f, a, canvas
+	f = Figure()
+	a = f.add_subplot(111)
+	a.axis([-100,100,-100,100])
+	a.axvline(color='k')  # axe des y
+	a.axhline(color='k')  # axe des x
+	a.grid()            # reprend les labels des plots
+	# Figure matplotlib dans GUI
+	canvas = FigureCanvasTkAgg(f, master=root)
+	canvas._tkcanvas.grid(column=1, row=1,rowspan =4)
+	canvas.show()
 
 # ====> GUI
 root = Tk.Tk()
