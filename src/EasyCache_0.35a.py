@@ -4,7 +4,7 @@
 Copyright chezlenox (2013) - chezlenox@gmail.com
 Contributor(s) : DQ (2011 - 2013)
 """
-VERSION="0.34a"
+VERSION="0.35a"
 """
 It is a pure python module that depends on:
 - scipy       : http://www.scipy.org/
@@ -80,17 +80,26 @@ def buttonClickSource():
 	labelScrVar.set(Vsource)
 
 def buttonClickCible():
-	global Vcible
-	Vcible = os.path.normpath(tkFileDialog.askdirectory())
+	global Vcible, dir_opt, VinitCible
+	VinitCible = os.path.normpath("//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/")
+	
+	# defining options for opening a directory
+	dir_opt = options = {}
+	#options['initialdir'] = VinitCible
+	options['mustexist'] = False
+	options['parent'] = root
+	options['title'] = 'Dossier SERVEUR'
+	
+	Vcible = os.path.normpath(tkFileDialog.askdirectory(**dir_opt))
 	labelCblVar.set(Vcible)
 
 def buttonClickProcess():
 	f.clf() # matplotlib.pyplot.clf() => Clear the current figure.
 	f_creerMatplotGraphe()
-	f_checkProcess()
+	f_checkSrCiVide()
 	labelScrVar.set(Vsource)
 	labelCblVar.set(Vcible)
-	print'1 f_checkProcess() DONE'
+	print'1 f_checkSrCiVide() DONE'
 	f_openDcm()
 	print'2 f_openDcm() DONE'
 	f_creerEcf()
@@ -112,7 +121,6 @@ def buttonClickClear():
 
 	Vcible=''
 	Vsource=''
-
 	labelCblVar.set('')
 	labelScrVar.set('')
 	labeltxt1Var.set('')
@@ -123,29 +131,36 @@ def buttonClickClear():
 # <== Click GUI
 
 def f_exploSource():
-	global Vsource, filetypes, VinitSource
-	VinitSource = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/Export_ECLIPSE/"
-	Vsource = os.path.normpath(tkFileDialog.askopenfilename(initialdir = VinitSource, filetypes = [("RP_dicom (Eclispe)","*.dcm"),("All", "*")]))
+	global Vsource, filetypes
+	
+	# defining options for opening a directory
+	file_opt = options = {}
+	options['initialdir'] = '//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/Export_ECLIPSE/'
+	options['parent'] = root
+	options['title'] = 'RP_dicom (Eclispe)'
+	options['defaultextension'] = '.dcm'
+	options['filetypes'] = [("RP_dicom (Eclispe)","*.dcm"),('all files', '.*')]
+
+	Vsource = os.path.normpath(tkFileDialog.askopenfilename(**file_opt))
 
 def f_exploCible(VinitCible):
-	global Vcible
+	global Vcible, dir_opt
 	VinitCible = "//ficpc-exp1/pc$/Radiotherapie/echange/_LOGICIELS/EasyCache/"
-
 	if VinitCible == '':
-		Vcible = tkFileDialog.askdirectory(initialdir = VinitCible)
+		Vcible = tkFileDialog.askdirectory(**dir_opt)
 	else:
 		Vcible = os.path.normpath(VinitCible)
 
-def f_checkProcess():
+def f_checkSrCiVide():
 	global VinitCible, VinitSource
 	if Vsource == '':
 		VinitSource = os.path.normpath(VinitSource)
-		print VinitSource
+		print "VinitSource >> ",VinitSource
 		f_exploSource()
 
 	if Vcible == '':
 		VinitCible = os.path.normpath(VinitCible)
-		print VinitCible
+		print "VinitCible >> ", VinitCible
 		f_exploCible(VinitCible)
 
 def f_checkDcm():
@@ -193,7 +208,6 @@ def f_headerEcf():
 ID=0
 NoOfBeams="""+ str(nbrOfbeam) +"""
 ProgVersion=0
-
 """ #le triple """ permet le multiligne sans \n
 
 	ecf_out = ecf_header + ecf_dateplan + ecf_namepat + ecf_datepat + ecf_beam
@@ -206,12 +220,14 @@ def f_coord(nivo) :
 	ssd = ds[0x300a,0xb0][0][0x300a,0xb4].value
 	std = ds[0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0xf6].value # Source to Block Tray Distance
 	diverg = ds[0x300a,0xb0][0][0x300a,0xf4][nivo][0x300a,0xf5].value #(300a, 00f8) Block Type CS: 'APERTURE'
+
 	if diverg == 'Plaque electron': #Au CHU si plaque e- divergence OFF
 			diverg = "N"
 			VfacAgr = (905.0/950.0) #Facteur historique (recherche empirique) e- = 905 
 	if diverg == 'Plaque photon':
 			diverg = "Y"
 			VfacAgr = 1
+
 		# Beurk a modifier si possible Parser fichier gabarit xml
 	outBeam = """[Beam"""+ str(nivo) +"""]
 Description="""+ str(headercom)+"_"+ str(machine) +"_"+ str(idpat) +"_"+ str(namepat) +"_"+ str(planlabel) +"_"+ str(nomsdubeam)+"""
