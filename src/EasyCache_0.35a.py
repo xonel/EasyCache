@@ -153,14 +153,12 @@ def f_exploCible(VinitCible):
 
 def f_checkSrCiVide():
 	global VinitCible, VinitSource
-	if Vsource == '':
+	if Vsource == '' or Vsource == '.':
 		VinitSource = os.path.normpath(VinitSource)
-		print "VinitSource >> ",VinitSource
 		f_exploSource()
 
-	if Vcible == '':
+	if Vcible == '' or Vcible == '.':
 		VinitCible = os.path.normpath(VinitCible)
-		print "VinitCible >> ", VinitCible
 		f_exploCible(VinitCible)
 
 def f_checkDcm():
